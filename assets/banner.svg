@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300" viewBox="0 0 1200 300" role="img" aria-label="ClimaTec AR — Köppen-Geiger, Thornthwaite, Holdridge">
+  <defs>
+    <clipPath id="r"><rect width="1200" height="300" rx="18"/></clipPath>
+  </defs>
+  <g clip-path="url(#r)">
+    <!-- franjas celeste, blanca, celeste -->
+    <rect width="1200" height="100" fill="#74ACDF"/>
+    <rect y="100" width="1200" height="100" fill="#FFFFFF"/>
+    <rect y="200" width="1200" height="100" fill="#74ACDF"/>
+  </g>
+  <!-- sol -->
+  <g transform="translate(140 150)" fill="#F6B40E" stroke="#85340A" stroke-width="1.5">
+    <g id="rayos">
+      <path d="M0 -26 L5 -52 L0 -46 L-5 -52 Z"/>
+      <path d="M0 -26 L5 -52 L0 -46 L-5 -52 Z" transform="rotate(45)"/>
+      <path d="M0 -26 L5 -52 L0 -46 L-5 -52 Z" transform="rotate(90)"/>
+      <path d="M0 -26 L5 -52 L0 -46 L-5 -52 Z" transform="rotate(135)"/>
+      <path d="M0 -26 L5 -52 L0 -46 L-5 -52 Z" transform="rotate(180)"/>
+      <path d="M0 -26 L5 -52 L0 -46 L-5 -52 Z" transform="rotate(225)"/>
+      <path d="M0 -26 L5 -52 L0 -46 L-5 -52 Z" transform="rotate(270)"/>
+      <path d="M0 -26 L5 -52 L0 -46 L-5 -52 Z" transform="rotate(315)"/>
+    </g>
+    <circle r="26"/>
+  </g>
+  <g font-family="Inter, 'Segoe UI', Helvetica, Arial, sans-serif" text-anchor="middle">
+    <text x="640" y="176" font-size="80" font-weight="800" fill="#0f172a">ClimaTec <tspan fill="#2B6CB0">A</tspan><tspan fill="#C98A00">R</tspan></text>
+    <text x="640" y="246" font-size="28" font-weight="700" fill="#0f172a">Köppen-Geiger · Thornthwaite · Holdridge</text>
+    <text x="640" y="280" font-size="18" fill="#0f172a">CHELSA V2.1 · 1991–2020 · ~1 km · 502 departamentos · ES · PT · EN</text>
+  </g>
+  <rect width="1200" height="300" rx="18" fill="none" stroke="#0f172a" stroke-opacity="0.15" stroke-width="2"/>
+</svg>

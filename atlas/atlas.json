@@ -1,0 +1,242 @@
+{
+ "grupos": [
+  {
+   "id": "koppen",
+   "titulo": {
+    "es": "Köppen-Geiger",
+    "pt": "Köppen-Geiger",
+    "en": "Köppen-Geiger"
+   },
+   "figuras": [
+    {
+     "arquivo": "fig_koppen.png",
+     "largo": true,
+     "legenda": {
+      "es": "Clasificación climática de Köppen-Geiger (Alvares et al., 2013). Predomina Cfa — Templado, sin estación seca, verano cálido (26.0% del área).",
+      "pt": "Classificação climática de Köppen-Geiger (Alvares et al., 2013). Predomina Cfa — Temperado, sem estação seca, verão quente (26.0% da área).",
+      "en": "Köppen-Geiger climate classification (Alvares et al., 2013). Cfa — Temperate, no dry season, hot summer prevails (26.0% of the area)."
+     }
+    },
+    {
+     "arquivo": "fig_p_anual.png",
+     "legenda": {
+      "es": "Precipitación media anual (mm).",
+      "pt": "Precipitação média anual (mm).",
+      "en": "Mean annual precipitation (mm)."
+     }
+    },
+    {
+     "arquivo": "fig_p_mes_seco.png",
+     "legenda": {
+      "es": "Precipitación del mes más seco (mm).",
+      "pt": "Precipitação do mês mais seco (mm).",
+      "en": "Precipitation of the driest month (mm)."
+     }
+    },
+    {
+     "arquivo": "fig_t_anual.png",
+     "legenda": {
+      "es": "Temperatura media anual (°C).",
+      "pt": "Temperatura média anual (°C).",
+      "en": "Mean annual temperature (°C)."
+     }
+    },
+    {
+     "arquivo": "fig_t_mes_frio.png",
+     "legenda": {
+      "es": "Temperatura media del mes más frío (°C).",
+      "pt": "Temperatura média do mês mais frio (°C).",
+      "en": "Mean temperature of the coldest month (°C)."
+     }
+    }
+   ]
+  },
+  {
+   "id": "thornthwaite",
+   "titulo": {
+    "es": "Thornthwaite (1948)",
+    "pt": "Thornthwaite (1948)",
+    "en": "Thornthwaite (1948)"
+   },
+   "figuras": [
+    {
+     "arquivo": "fig_th_umidade.png",
+     "largo": true,
+     "legenda": {
+      "es": "Clase de humedad de Thornthwaite (CAD = 100 mm). Predomina E — Árido (35.4% del área).",
+      "pt": "Classe de umidade de Thornthwaite (CAD = 100 mm). Predomina E — Árido (35.4% da área).",
+      "en": "Thornthwaite moisture class (AWC = 100 mm). E — Arid prevails (35.4% of the area)."
+     }
+    },
+    {
+     "arquivo": "fig_th_subtipo.png",
+     "legenda": {
+      "es": "Variación estacional de la humedad (subtipo de Thornthwaite). Predomina d — exceso hídrico nulo o pequeño (91.1% del área).",
+      "pt": "Variação sazonal da umidade (subtipo de Thornthwaite). Predomina d — excedente hídrico nulo ou pequeno (91.1% da área).",
+      "en": "Seasonal variation of moisture (Thornthwaite subtype). d — little or no water surplus prevails (91.1% of the area)."
+     }
+    },
+    {
+     "arquivo": "fig_th_termica.png",
+     "legenda": {
+      "es": "Eficiencia térmica (ETP anual). Predomina A' — Megatérmico (87.5% del área).",
+      "pt": "Eficiência térmica (ETP anual). Predomina A' — Megatérmico (87.5% da área).",
+      "en": "Thermal efficiency (annual PET). A' — Megathermal prevails (87.5% of the area)."
+     }
+    },
+    {
+     "arquivo": "fig_th_concentracao.png",
+     "legenda": {
+      "es": "Concentración estival de la eficiencia térmica. Predomina a' (100.0% del área).",
+      "pt": "Concentração estival da eficiência térmica. Predomina a' (100.0% da área).",
+      "en": "Summer concentration of thermal efficiency. a' prevails (100.0% of the area)."
+     }
+    },
+    {
+     "arquivo": "fig_th_im.png",
+     "legenda": {
+      "es": "Índice de humedad (Im = Ih − 0,6 Ia).",
+      "pt": "Índice de umidade (Im = Ih − 0,6 Ia).",
+      "en": "Moisture index (Im = Ih − 0.6 Ia)."
+     }
+    },
+    {
+     "arquivo": "fig_th_def.png",
+     "legenda": {
+      "es": "Déficit hídrico anual (mm), balance hídrico de Thornthwaite y Mather (1955).",
+      "pt": "Deficiência hídrica anual (mm), balanço hídrico de Thornthwaite e Mather (1955).",
+      "en": "Annual water deficit (mm), Thornthwaite and Mather (1955) water balance."
+     }
+    },
+    {
+     "arquivo": "fig_th_exc.png",
+     "legenda": {
+      "es": "Exceso hídrico anual (mm).",
+      "pt": "Excedente hídrico anual (mm).",
+      "en": "Annual water surplus (mm)."
+     }
+    },
+    {
+     "arquivo": "fig_pet_anual.png",
+     "legenda": {
+      "es": "Evapotranspiración potencial anual (mm), Penman-Monteith (CHELSA).",
+      "pt": "Evapotranspiração potencial anual (mm), Penman-Monteith (CHELSA).",
+      "en": "Annual potential evapotranspiration (mm), Penman-Monteith (CHELSA)."
+     }
+    }
+   ]
+  },
+  {
+   "id": "holdridge",
+   "titulo": {
+    "es": "Zonas de vida de Holdridge",
+    "pt": "Zonas de vida de Holdridge",
+    "en": "Holdridge life zones"
+   },
+   "figuras": [
+    {
+     "arquivo": "fig_holdridge.png",
+     "largo": true,
+     "legenda": {
+      "es": "Zonas de vida de Holdridge (ETP de Holdridge = 58,93 × biotemperatura). Predomina Bosque seco subtropical (17.7% del área).",
+      "pt": "Zonas de vida de Holdridge (ETP de Holdridge = 58,93 × biotemperatura). Predomina Floresta seca subtropical (17.7% da área).",
+      "en": "Holdridge life zones (Holdridge PET = 58.93 × biotemperature). Subtropical dry forest prevails (17.7% of the area)."
+     }
+    },
+    {
+     "arquivo": "fig_biotemp.png",
+     "legenda": {
+      "es": "Biotemperatura media anual (°C).",
+      "pt": "Biotemperatura média anual (°C).",
+      "en": "Mean annual biotemperature (°C)."
+     }
+    },
+    {
+     "arquivo": "fig_razao_etp.png",
+     "legenda": {
+      "es": "Razón de evapotranspiración potencial (ETP de Holdridge / P).",
+      "pt": "Razão de evapotranspiração potencial (ETP de Holdridge / P).",
+      "en": "Potential evapotranspiration ratio (Holdridge PET / P)."
+     }
+    }
+   ]
+  },
+  {
+   "id": "validacion",
+   "titulo": {
+    "es": "Validación e incertidumbre",
+    "pt": "Validação e incerteza",
+    "en": "Validation and uncertainty"
+   },
+   "figuras": [
+    {
+     "arquivo": "fig_val_estaciones.png",
+     "largo": true,
+     "legenda": {
+      "es": "Izquierda: sesgo medio de la temperatura mensual de CHELSA respecto a 67 estaciones (GHCN-Daily, 1991–2020, mismos meses): -0.08 °C en promedio (error absoluto medio 0.61 °C); CHELSA es más frío en 34 de las 67 estaciones. Derecha: sesgo relativo de la precipitación anual respecto a 53 estaciones sinópticas (NOAA GSOD; días con total completo o sin lluvia registrada, meses con ≥ 27 días): mediana -5.4%, 28 estaciones dentro de ±10%; correlación mensual media 0.80.",
+      "pt": "Esquerda: viés médio da temperatura mensal do CHELSA em relação a 67 estações (GHCN-Daily, 1991–2020, mesmos meses): -0.08 °C em média (erro absoluto médio 0.61 °C); o CHELSA é mais frio em 34 das 67 estações. Direita: viés relativo da precipitação anual em relação a 53 estações sinóticas (NOAA GSOD; dias com total completo ou sem chuva registrada, meses com ≥ 27 dias): mediana -5.4%, 28 estações dentro de ±10%; correlação mensal média 0.80.",
+      "en": "Left: mean bias of CHELSA monthly temperature against 67 stations (GHCN-Daily, 1991–2020, same months): -0.08 °C on average (mean absolute error 0.61 °C); CHELSA is colder at 34 of the 67 stations. Right: relative bias of annual precipitation against 53 synoptic stations (NOAA GSOD; days with a complete total or no recorded rain, months with ≥ 27 days): median -5.4%, 28 stations within ±10%; mean monthly correlation 0.80."
+     }
+    },
+    {
+     "arquivo": "fig_val_beck.png",
+     "largo": true,
+     "legenda": {
+      "es": "Köppen-Geiger 1991–2020 de Beck et al. (2023), V2, 1 km. Concordancia con el mapa de este trabajo: 73.5% del área (86.4% en los grupos principales).",
+      "pt": "Köppen-Geiger 1991–2020 de Beck et al. (2023), V2, 1 km. Concordância com o mapa deste trabalho: 73.5% da área (86.4% nos grupos principais).",
+      "en": "Köppen-Geiger 1991–2020 from Beck et al. (2023), V2, 1 km. Agreement with this work's map: 73.5% of the area (86.4% for the main groups)."
+     }
+    },
+    {
+     "arquivo": "fig_val_terraclimate.png",
+     "legenda": {
+      "es": "Köppen-Geiger calculado con las normales 1991–2020 de TerraClimate (~4 km). Concordancia con CHELSA: Köppen 60.9%, Thornthwaite (humedad) 75.9%, Holdridge 55.3% del área.",
+      "pt": "Köppen-Geiger calculado com as normais 1991–2020 do TerraClimate (~4 km). Concordância com o CHELSA: Köppen 60.9%, Thornthwaite (umidade) 75.9%, Holdridge 55.3% da área.",
+      "en": "Köppen-Geiger computed from the 1991–2020 TerraClimate normals (~4 km). Agreement with CHELSA: Köppen 60.9%, Thornthwaite (moisture) 75.9%, Holdridge 55.3% of the area."
+     }
+    },
+    {
+     "arquivo": "fig_estabilidad_koppen.png",
+     "legenda": {
+      "es": "Estabilidad interanual de la clase, Köppen-Geiger (1991–2020): porcentaje de años clasificados en la misma clase de la normal 1991–2020 (media 49%).",
+      "pt": "Estabilidade interanual da classe, Köppen-Geiger (1991–2020): porcentagem de anos classificados na mesma classe da normal 1991–2020 (média 49%).",
+      "en": "Interannual class stability, Köppen-Geiger (1991–2020): percentage of years classified in the same class as the 1991–2020 normal (mean 49%)."
+     }
+    },
+    {
+     "arquivo": "fig_estabilidad_umidade.png",
+     "legenda": {
+      "es": "Estabilidad interanual de la clase, Thornthwaite (humedad) (1991–2018): porcentaje de años clasificados en la misma clase de la normal 1991–2020 (media 67%).",
+      "pt": "Estabilidade interanual da classe, Thornthwaite (umidade) (1991–2018): porcentagem de anos classificados na mesma classe da normal 1991–2020 (média 67%).",
+      "en": "Interannual class stability, Thornthwaite (moisture) (1991–2018): percentage of years classified in the same class as the 1991–2020 normal (mean 67%)."
+     }
+    },
+    {
+     "arquivo": "fig_estabilidad_zona.png",
+     "legenda": {
+      "es": "Estabilidad interanual de la clase, Holdridge (1991–2020): porcentaje de años clasificados en la misma clase de la normal 1991–2020 (media 60%).",
+      "pt": "Estabilidade interanual da classe, Holdridge (1991–2020): porcentagem de anos classificados na mesma classe da normal 1991–2020 (média 60%).",
+      "en": "Interannual class stability, Holdridge (1991–2020): percentage of years classified in the same class as the 1991–2020 normal (mean 60%)."
+     }
+    },
+    {
+     "arquivo": "fig_ecorregiones.png",
+     "largo": true,
+     "legenda": {
+      "es": "Zonas de vida de Holdridge y límites de las ecorregiones RESOLVE (2017). Zona dominante en las mayores ecorregiones: Patagonian steppe → estepa templada fría (34%); Dry Chaco → bosque seco subtropical (74%); Humid Pampas → bosque húmedo templado cálido (59%); Low Monte → estepa espinosa templada cálida (74%). Asignando a cada ecorregión su zona dominante, la correspondencia es del 54.2% del área.",
+      "pt": "Zonas de vida de Holdridge e limites das ecorregiões RESOLVE (2017). Zona dominante nas maiores ecorregiões: Patagonian steppe → estepe temperada fria (34%); Dry Chaco → floresta seca subtropical (74%); Humid Pampas → floresta úmida temperada quente (59%); Low Monte → estepe espinhosa temperada quente (74%). Atribuindo a cada ecorregião sua zona dominante, a correspondência é de 54.2% da área.",
+      "en": "Holdridge life zones and RESOLVE (2017) ecoregion boundaries. Dominant zone in the largest ecoregions: Patagonian steppe → cool temperate steppe (34%); Dry Chaco → subtropical dry forest (74%); Humid Pampas → warm temperate moist forest (59%); Low Monte → warm temperate thorn steppe (74%). Assigning each ecoregion its dominant zone, the correspondence is 54.2% of the area."
+     }
+    },
+    {
+     "arquivo": "fig_sensibilidad.png",
+     "legenda": {
+      "es": "Sensibilidad de las clasificaciones: porcentaje del área del país que cambia de clase al perturbar la temperatura (±0,5 °C y la corrección del sesgo medio frente a las estaciones), la precipitación (±10%), la CAD (50 y 150 mm), la ETP (+10%) o el método de la ETP (Thornthwaite 1948 en lugar de Penman-Monteith; Penman-Monteith en lugar de la ETP de Holdridge), y al usar TerraClimate.",
+      "pt": "Sensibilidade das classificações: porcentagem da área do país que muda de classe ao perturbar a temperatura (±0,5 °C e a correção do viés médio frente às estações), a precipitação (±10%), a CAD (50 e 150 mm), a ETP (+10%) ou o método da ETP (Thornthwaite 1948 em vez de Penman-Monteith; Penman-Monteith em vez da ETP de Holdridge), e ao usar o TerraClimate.",
+      "en": "Sensitivity of the classifications: percentage of the country's area changing class when perturbing temperature (±0.5 °C and the correction of the mean bias against stations), precipitation (±10%), the AWC (50 and 150 mm), PET (+10%) or the PET method (Thornthwaite 1948 instead of Penman-Monteith; Penman-Monteith instead of Holdridge PET), and when using TerraClimate."
+     }
+    }
+   ]
+  }
+ ]
+}

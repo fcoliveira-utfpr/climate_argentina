@@ -1,0 +1,8 @@
+# dados pesados: publicados no Release do GitHub (ver README)
+dados_brutos/
+dados_brutos_log_download.txt
+__pycache__/
+*.pyc
+
+# manuscrito (não publicar)
+artigo/
