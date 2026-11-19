@@ -69,6 +69,8 @@ def grade():
     ref = caminho_normal("tas")
     if not ref.exists():
         ref = caminho_mensal("tas", ANO_INICIO, 1)
+    if not ref.exists():                      # dados pesados só no Release: mesma grade em unidades.tif
+        ref = GADM_DIR / "unidades.tif"
     with rasterio.open(ref) as src:
         return src.transform, src.crs, src.shape
 

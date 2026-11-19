@@ -135,7 +135,7 @@ class Mapa:
             ax.set_title(f"({letra_}) {titulo}" if letra_ else titulo, fontsize=8, fontweight="bold", loc="left")
 
     def classes(self, ax, cod, camada, letra_=None, titulo=None, leg_min=0.3, ncol=1, leg_fs=5.5, loc="lower right",
-                nomes_curtos=False):
+                nomes_curtos=False, abaixo=False):
         cores = ["#ffffff"] * 256
         pct = area_pct(cod, self.px["area"])
         for c in pct:
@@ -150,11 +150,16 @@ class Mapa:
             if pct[c] >= leg_min:
                 n = letra(camada, c) if nomes_curtos else nome_classe(camada, c)
                 h.append(Patch(facecolor=cores[c], edgecolor="#333", lw=0.3, label=f"{n} ({pct[c]:.1f}%)".replace(".", ",")))
-        ax.legend(handles=h, loc=loc, fontsize=leg_fs, ncol=ncol, frameon=True, framealpha=0.9,
-                  handlelength=1, handleheight=0.8, borderpad=0.3, labelspacing=0.25)
+        if abaixo:
+            ax.legend(handles=h, loc="upper center", bbox_to_anchor=(0.5, -0.05), fontsize=leg_fs, ncol=ncol,
+                      frameon=False, handlelength=1, handleheight=0.8, labelspacing=0.3, columnspacing=0.8)
+        else:
+            ax.legend(handles=h, loc=loc, fontsize=leg_fs, ncol=ncol, frameon=True, framealpha=0.9,
+                      handlelength=1, handleheight=0.8, borderpad=0.3, labelspacing=0.25)
         return pct
 
-    def continuo(self, ax, v, cmap, un, letra_=None, titulo=None, vmin=None, vmax=None, norm=None, contorno=None):
+    def continuo(self, ax, v, cmap, un, letra_=None, titulo=None, vmin=None, vmax=None, norm=None, contorno=None,
+                 abaixo=False):
         g = self.grade(v)
         im = ax.imshow(g, extent=self.ext, cmap=cmap, vmin=None if norm else vmin, vmax=None if norm else vmax,
                        norm=norm, interpolation="nearest")
@@ -162,7 +167,8 @@ class Mapa:
             ax.contour(g, levels=[contorno], colors="k", linewidths=0.6,
                        extent=[self.ext[0], self.ext[1], self.ext[3], self.ext[2]], origin="upper")
         self.eixo(ax, letra_, titulo)
-        cb = plt.colorbar(im, ax=ax, shrink=0.55, pad=0.02)
+        cb = (plt.colorbar(im, ax=ax, orientation="horizontal", shrink=0.8, pad=0.05, aspect=25) if abaixo
+              else plt.colorbar(im, ax=ax, shrink=0.55, pad=0.02))
         cb.set_label(un, fontsize=7)
         cb.ax.tick_params(labelsize=6)
         return im
@@ -442,7 +448,12 @@ def main():
     # ------------------------------------------------ normais de 15 anos
     lin, col = px["lin"], px["col"]
     metades = {}
-    for nome, anos in (("1991-2005", range(1991, 2006)), ("2006-2020", range(2006, 2021))):
+    anterior = ART / "resultados_artigo.json"
+    sem_mensal = not C.caminho_mensal("tas", 1991, 1).exists()
+    if sem_mensal and anterior.exists():   # recortes mensais só no Release: reaproveita o resultado anterior
+        R["metades"] = json.loads(anterior.read_text(encoding="utf-8"))["metades"]
+        print("metades: reaproveitadas de resultados_artigo.json")
+    for nome, anos in ((() if sem_mensal else (("1991-2005", range(1991, 2006)), ("2006-2020", range(2006, 2021))))):
         acc = {}
         for v in C.VARIAVEIS:
             soma = np.zeros((12, len(lin)))
@@ -461,7 +472,6 @@ def main():
         metades[nome] = dict(T=Tm.mean(0), P=Pm.sum(0), kp=K.koppen(Tm, Pm, px["lat"]),
                              um=K.thornthwaite(Pm, Em, px["lat"], so_umidade=True)["umidade"],
                              hd=K.holdridge(Tm, Pm, px["lat"], so_id=True)["id"])
-    a1, a2 = metades["1991-2005"], metades["2006-2020"]
 
     def transicoes(x1, x2, cam, n=6):
         m = x1 != x2
@@ -470,16 +480,18 @@ def main():
         f = (lambda c: letra(cam, c)) if cam != "holdridge" else (lambda c: nome_classe("holdridge", c))
         return {f"{f(a)} → {f(b)}": round(float(p), 2) for (a, b), p in pares.items()}
     grupo = lambda x: np.array([KOPPEN_CLASSES.get(int(c), "?")[0] for c in range(32)])[x]
-    R["metades"] = dict(
-        dT=float(np.average(a2["T"] - a1["T"], weights=area)), dP=float(np.average(a2["P"] - a1["P"], weights=area)),
-        koppen=float(100 * area[a1["kp"] != a2["kp"]].sum() / area.sum()),
-        umidade=float(100 * area[a1["um"] != a2["um"]].sum() / area.sum()),
-        holdridge=float(100 * area[a1["hd"] != a2["hd"]].sum() / area.sum()),
-        grupos={g: [float(100 * area[grupo(a1["kp"]) == g].sum() / area.sum()),
-                    float(100 * area[grupo(a2["kp"]) == g].sum() / area.sum())] for g in "ABCDE"},
-        trans_koppen=transicoes(a1["kp"], a2["kp"], "koppen"),
-        trans_umidade=transicoes(a1["um"], a2["um"], "th_umidade"),
-        trans_holdridge=transicoes(a1["hd"], a2["hd"], "holdridge"))
+    if not sem_mensal:
+        a1, a2 = metades["1991-2005"], metades["2006-2020"]
+        R["metades"] = dict(
+            dT=float(np.average(a2["T"] - a1["T"], weights=area)), dP=float(np.average(a2["P"] - a1["P"], weights=area)),
+            koppen=float(100 * area[a1["kp"] != a2["kp"]].sum() / area.sum()),
+            umidade=float(100 * area[a1["um"] != a2["um"]].sum() / area.sum()),
+            holdridge=float(100 * area[a1["hd"] != a2["hd"]].sum() / area.sum()),
+            grupos={g: [float(100 * area[grupo(a1["kp"]) == g].sum() / area.sum()),
+                        float(100 * area[grupo(a2["kp"]) == g].sum() / area.sum())] for g in "ABCDE"},
+            trans_koppen=transicoes(a1["kp"], a2["kp"], "koppen"),
+            trans_umidade=transicoes(a1["um"], a2["um"], "th_umidade"),
+            trans_holdridge=transicoes(a1["hd"], a2["hd"], "holdridge"))
     print("metades ok")
 
     # ------------------------------------------------ Beck: 1961-1990 x 1991-2020
@@ -722,8 +734,9 @@ def main():
     salvar(fig, 6)
 
     # 7 – Köppen
-    fig, ax = plt.subplots(figsize=(5.6, 8))
-    M.classes(ax, px["koppen"], "koppen", leg_min=0.05, leg_fs=6.5)
+    fig, ax = plt.subplots(figsize=(5.2, 8))
+    M.classes(ax, px["koppen"], "koppen", leg_min=0.05, leg_fs=6.5, loc="upper left")
+    ax.get_legend().set_bbox_to_anchor((1.02, 1))
     salvar(fig, 7)
 
     # 8 – % da área por classe nos três sistemas
@@ -745,10 +758,10 @@ def main():
     salvar(fig, 8)
 
     # 9 – Thornthwaite
-    fig, axs = plt.subplots(1, 3, figsize=(11, 6))
-    M.classes(axs[0], px["th_umidade"], "th_umidade", "a", "Clase de humedad", leg_min=0.05, leg_fs=6)
-    M.continuo(axs[1], px["th_Im"], "BrBG", "Iₘ (%)", "b", "Índice de humedad", norm=TwoSlopeNorm(0, -60, 100))
-    M.classes(axs[2], px["th_termica"], "th_termica", "c", "Eficiencia térmica", leg_min=0.05, leg_fs=6)
+    fig, axs = plt.subplots(1, 3, figsize=(11, 7.4))
+    M.classes(axs[0], px["th_umidade"], "th_umidade", "a", "Clase de humedad", leg_min=0.05, leg_fs=6.5, abaixo=True)
+    M.continuo(axs[1], px["th_Im"], "BrBG", "Iₘ (%)", "b", "Índice de humedad", norm=TwoSlopeNorm(0, -60, 100), abaixo=True)
+    M.classes(axs[2], px["th_termica"], "th_termica", "c", "Eficiencia térmica", leg_min=0.05, leg_fs=6.5, abaixo=True)
     salvar(fig, 9)
 
     # 10 – balanço hídrico de três cidades
@@ -797,10 +810,10 @@ def main():
     salvar(fig, 10)
 
     # 11 – Holdridge
-    fig, axs = plt.subplots(1, 2, figsize=(10, 7.4))
-    M.classes(axs[0], px["holdridge"], "holdridge", "a", "Zonas de vida", leg_min=0.4, leg_fs=5.2)
+    fig, axs = plt.subplots(1, 2, figsize=(10, 9.2))
+    M.classes(axs[0], px["holdridge"], "holdridge", "a", "Zonas de vida", leg_min=0.1, leg_fs=6, ncol=2, abaixo=True)
     M.continuo(axs[1], np.log2(np.clip(px["hd_razao_ETP"], 0.0625, 32)), "BrBG_r", "log₂(ETP/P)", "b",
-               "Razón ETP de Holdridge / P", -4, 5, contorno=0)
+               "Razón ETP de Holdridge / P", -4, 5, contorno=0, abaixo=True)
     salvar(fig, 11)
 
     # 12 – composição por província
@@ -843,12 +856,12 @@ def main():
         ax.legend(fontsize=7, markerscale=4)
         ax.grid(ls=":", lw=0.4)
     for j, (df, col, cm_, lim, tit, un) in enumerate((
-            (vT, "ch", "RdBu_r", 3, "Sesgo de la temperatura — CHELSA", "°C"),
-            (vT, "tc", "RdBu_r", 3, "Sesgo de la temperatura — TerraClimate", "°C"),
-            (vP, "ch", "BrBG", 40, "Sesgo relativo de P anual — CHELSA", "%"),
-            (vP, "tc", "BrBG", 40, "Sesgo relativo de P anual — TerraClimate", "%"))):
+            (vT, "ch", "RdBu_r", 3, "Sesgo de la temperatura\nCHELSA", "°C"),
+            (vT, "tc", "RdBu_r", 3, "Sesgo de la temperatura\nTerraClimate", "°C"),
+            (vP, "ch", "BrBG", 40, "Sesgo relativo de P anual\nCHELSA", "%"),
+            (vP, "tc", "BrBG", 40, "Sesgo relativo de P anual\nTerraClimate", "%"))):
         ax = fig.add_subplot(gs[1, j])
-        sc = ax.scatter(df.lon, df.lat, c=df[col], cmap=cm_, vmin=-lim, vmax=lim, s=14, edgecolor="k", lw=0.3, zorder=5)
+        sc = ax.scatter(df.lon, df.lat, c=df[col], cmap=cm_, vmin=-lim, vmax=lim, s=26, edgecolor="k", lw=0.4, zorder=5)
         M.eixo(ax, "cdef"[j], tit)
         ax.title.set_fontsize(7)
         cb = plt.colorbar(sc, ax=ax, shrink=0.5, pad=0.02, extend="both")
@@ -858,30 +871,32 @@ def main():
     salvar(fig, 13)
 
     # 14 – comparação com outros produtos
-    fig, axs = plt.subplots(1, 4, figsize=(12, 6.4))
+    fig, axs = plt.subplots(1, 4, figsize=(12, 8.6))
     tcr = R["terraclimate"]
     M.classes(axs[0], b91, "koppen", "a", f"Beck et al. (2023): {R['beck']['concordancia']:.1f}%".replace(".", ","),
-              leg_min=0.5, leg_fs=5.5, nomes_curtos=True)
+              leg_min=0.5, leg_fs=6, nomes_curtos=True, abaixo=True, ncol=3)
     M.classes(axs[1], tc["kp"], "koppen", "b", f"Köppen (TerraClimate): {tcr['koppen']:.1f}%".replace(".", ","),
-              leg_min=0.5, leg_fs=5.5, nomes_curtos=True)
+              leg_min=0.5, leg_fs=6, nomes_curtos=True, abaixo=True, ncol=3)
     M.classes(axs[2], tc["um"], "th_umidade", "c", f"Humedad (TerraClimate): {tcr['umidade']:.1f}%".replace(".", ","),
-              leg_min=0.3, leg_fs=5.5, nomes_curtos=True)
+              leg_min=0.3, leg_fs=6, nomes_curtos=True, abaixo=True, ncol=3)
     M.classes(axs[3], tc["hd"], "holdridge", "d", f"Holdridge (TerraClimate): {tcr['holdridge']:.1f}%".replace(".", ","),
-              leg_min=1.5, leg_fs=4.6)
+              leg_min=1.0, leg_fs=5.2, abaixo=True, ncol=1)
     salvar(fig, 14)
 
     # 15 – ecorregiões e sensibilidade
-    fig = plt.figure(figsize=(11, 7.2))
-    gs = fig.add_gridspec(1, 2, width_ratios=[1, 1.25])
+    fig = plt.figure(figsize=(10, 8.8))
+    gs = fig.add_gridspec(1, 2, width_ratios=[1, 0.62], wspace=0.35)
     ax = fig.add_subplot(gs[0])
-    M.classes(ax, px["holdridge"], "holdridge", "a", "Holdridge y ecorregiones RESOLVE 2017", leg_min=1.0, leg_fs=4.8)
-    eco_ar = eco[eco.cod.isin(np.unique(e_px))]
-    eco_ar.boundary.plot(ax=ax, color="k", lw=0.7, ls="--")
+    M.classes(ax, px["holdridge"], "holdridge", "a", "Holdridge y ecorregiones RESOLVE 2017", leg_min=1.0, leg_fs=5.5,
+              abaixo=True, ncol=2)
+    pais = M.prov.union_all() if hasattr(M.prov, "union_all") else M.prov.unary_union
+    eco_ar = gpd.clip(eco[eco.cod.isin(np.unique(e_px))].boundary, pais)   # limites só dentro do país
+    eco_ar.plot(ax=ax, color="k", lw=0.7, ls="--")
     ax.set_xlim(M.ext[0], M.ext[1])
     ax.set_ylim(M.ext[2], M.ext[3])
     ax = fig.add_subplot(gs[1])
     s = val["sensibilidade"]
-    rot = {"T-0.5": "T −0,5 °C", "T+0.5": "T +0,5 °C", "T_vies": f"T {s['T_vies']['dT']:+.2f} °C (sesgo)".replace(".", ","),
+    rot = {"T-0.5": "T −0,5 °C", "T+0.5": "T +0,5 °C", "T_vies": f"T {s['T_vies']['dT']:+.2f} °C".replace(".", ","),
            "P-10%": "P −10%", "P+10%": "P +10%", "CAD50": "CAD 50 mm", "CAD150": "CAD 150 mm", "ETP+10%": "ETP +10%",
            "ETP_metodo": "Método de la ETP"}
     cen = [c_ for c_ in rot if c_ in s]
@@ -897,7 +912,9 @@ def main():
     ax.invert_yaxis()
     ax.set_xlabel("% del área que cambia de clase")
     ax.set_title("(b) Sensibilidad", fontsize=8, fontweight="bold", loc="left")
-    ax.legend(fontsize=7)
+    ax.set_xlim(0, max(v for c_ in cen for k_, v in s[c_].items() if k_ != "dT") * 1.15)
+    ax.legend(fontsize=7, loc="upper center", bbox_to_anchor=(0.5, -0.08), ncol=3, frameon=False,
+              handlelength=1, columnspacing=0.8)
     ax.grid(axis="x", ls=":", lw=0.4)
     salvar(fig, 15)
 
@@ -909,7 +926,7 @@ def main():
     salvar(fig, 16)
 
     # 17 – série anual das áreas
-    fig, axs = plt.subplots(3, 1, figsize=(9, 9.5), sharex=True)
+    fig, axs = plt.subplots(1, 3, figsize=(12, 5.2))
     for ax, (k_, cam, tit) in zip(axs, (("koppen", "koppen", "(a) Köppen-Geiger"), ("umidade", "th_umidade", "(b) Humedad de Thornthwaite"),
                                         ("zona", "holdridge", "(c) Holdridge"))):
         e_ = estab[k_]
@@ -920,11 +937,33 @@ def main():
             ax.plot(e_["anos"], sr, "-o", ms=2.5, lw=1, color=LEG[cam + "_todas"][str(c)]["cor"], label=nm,
                     mec="#333", mew=0.2)
         ax.set_ylabel("% del país")
+        ax.set_xlabel("Año")
         ax.set_title(tit, fontsize=8, fontweight="bold", loc="left")
-        ax.legend(fontsize=6, ncol=2 if cam == "holdridge" else 4, loc="upper left", bbox_to_anchor=(1.01, 1))
+        ax.legend(fontsize=6, ncol=2 if cam == "holdridge" else 4, loc="upper center", bbox_to_anchor=(0.5, -0.13),
+                  frameon=False, handlelength=1.5, columnspacing=0.8)
         ax.grid(ls=":", lw=0.4)
     plt.tight_layout()
     salvar(fig, 17)
+
+    # 18 – plataforma (capturas do site; ver dados_brutos/capturas)
+    from PIL import Image, ImageDraw, ImageFont
+    cap = C.BRUTOS / "capturas"
+    if (cap / "ficha.png").exists():
+        ini, mp, fi = (Image.open(cap / f"{n_}.png").convert("RGB") for n_ in ("inicio", "mapa", "ficha"))
+        W = 1400
+        aj = lambda im: im.resize((W // 2 - 10, int(im.height * (W // 2 - 10) / im.width)), Image.LANCZOS)
+        A, B, Cc, D = aj(ini), aj(mp), aj(fi.crop((390, 880, 1320, 1400))), aj(fi.crop((390, 1400, 1320, 1720)))
+        h1, h2 = max(A.height, B.height), max(Cc.height, D.height)
+        out = Image.new("RGB", (W, h1 + h2 + 30), "white")
+        pos = {"A": (0, 0), "B": (W // 2 + 10, 0), "C": (0, h1 + 30), "D": (W // 2 + 10, h1 + 30)}
+        dr = ImageDraw.Draw(out)
+        fonte = ImageFont.truetype("arialbd.ttf", 34)
+        for (k_, (x0, y0)), im in zip(pos.items(), (A, B, Cc, D)):
+            out.paste(im, (x0, y0))
+            x1, y1 = x0 + im.width - 46, y0 + im.height - 48       # canto inferior direito do painel
+            dr.rectangle([x1, y1, x1 + 38, y1 + 42], fill="white", outline="black", width=2)
+            dr.text((x1 + 9, y1 + 2), k_, fill="black", font=fonte)
+        out.save(FIG / "Figura_18.png", dpi=(300, 300))
 
     (ART / "resultados_artigo.json").write_text(json.dumps(R, ensure_ascii=False, indent=1, default=float), encoding="utf-8")
     print("ok — figuras 1-17 e resultados_artigo.json")
